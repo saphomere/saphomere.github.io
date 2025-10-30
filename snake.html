@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,12 +17,10 @@
         flex-direction: column;
         font-family: 'Courier New', Courier, monospace;
     }
-
     .status-text {
         color: #00ff00aa;
         text-shadow: 0 0 5px #00ff00aa;
     }
-
     .restart-btn {
         background: #002200;
         color: #00ff00;
@@ -31,24 +28,18 @@
         border-radius: 12px;
         box-shadow: 0 0 15px #00ff0077;
     }
-
     .restart-btn:hover {
         background: #003300;
         box-shadow: 0 0 30px #00ff00aa;
     }
-
     .back-home {
         color: #ffffff;
     }
-
     .back-home:hover {
         text-shadow: 0 0 10px #00ff44;
     }
-    
 </style>
-
 <body>
-
     <div class="snake-container">
         <h1 class="snake-title">Snake Game</h1>
         <canvas id="gameCanvas" width="400" height="400"></canvas>
@@ -56,16 +47,12 @@
         <a href="index.html" class="back-home">← Back to Home</a>
         <button id="restartButton" class="restart-btn">Restart Game</button>
     </div>
-
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-
         const grid = 20;
         const tileCount = canvas.width / grid;
-
         let snake, dx, dy, nextDirection, food, score, gameOverFlag, gameInterval;
-
         function startGame() {
             snake = [{ x: 10, y: 10 }];
             dx = 1;
@@ -75,36 +62,28 @@
             gameOverFlag = false;
             placeFood();
             document.getElementById('statusText').textContent = "Use arrow keys to move!";
-
             if (gameInterval) clearInterval(gameInterval);
             gameInterval = setInterval(gameLoop, 100);
         }
-
         function gameLoop() {
             if (!gameOverFlag) {
                 update();
                 draw();
             }
         }
-
         function update() {
             dx = nextDirection.dx;
             dy = nextDirection.dy;
-
             const head = { x: snake[0].x + dx, y: snake[0].y + dy };
-
             if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
                 return gameOver();
             }
-
             for (let part of snake) {
                 if (head.x === part.x && head.y === part.y) {
                     return gameOver();
                 }
             }
-
             snake.unshift(head);
-
             if (head.x === food.x && head.y === food.y) {
                 score++;
                 placeFood();
@@ -112,12 +91,10 @@
                 snake.pop();
             }
         }
-
         function draw() {
             // Draw grid background
             ctx.fillStyle = '#001100';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
             // Draw subtle grid lines
             ctx.strokeStyle = '#003300';
             ctx.lineWidth = 1;
@@ -131,25 +108,20 @@
                 ctx.lineTo(canvas.width, i * grid);
                 ctx.stroke();
             }
-
-
             ctx.fillStyle = '#ff2222';
             ctx.shadowColor = '#ff4444';
             ctx.shadowBlur = 10;
             ctx.fillRect(food.x * grid, food.y * grid, grid, grid);
             ctx.shadowBlur = 0;
-
             ctx.fillStyle = '#00ff00';
             ctx.shadowColor = '#00ff00';
             ctx.shadowBlur = 15;
             snake.forEach(part => ctx.fillRect(part.x * grid, part.y * grid, grid, grid));
             ctx.shadowBlur = 0;
-
             ctx.fillStyle = '#00ff00';
             ctx.font = '20px monospace';
             ctx.fillText('Score: ' + score, 10, 20);
         }
-
         function placeFood() {
             food = {
                 x: Math.floor(Math.random() * tileCount),
@@ -157,12 +129,10 @@
             };
             if (snake.some(part => part.x === food.x && part.y === food.y)) placeFood();
         }
-
         function gameOver() {
             gameOverFlag = true;
             document.getElementById('statusText').textContent = "Game Over! Score: " + score;
         }
-
         document.addEventListener('keydown', e => {
             switch (e.key) {
                 case 'ArrowUp': if (dy !== 1) nextDirection = { dx: 0, dy: -1 }; break;
@@ -171,12 +141,8 @@
                 case 'ArrowRight': if (dx !== -1) nextDirection = { dx: 1, dy: 0 }; break;
             }
         });
-
         document.getElementById('restartButton').addEventListener('click', startGame);
-
         startGame();
     </script>
-
 </body>
-
 </html>
