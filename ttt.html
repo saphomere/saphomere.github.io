@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+    body {
+        background: radial-gradient(#2f2f4a, #0c0c16);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+</style>
+
+<body>
+    <div class="falling-letter" style="--left:5%; --duration:3.0s; --delay:0s;">O</div>
+    <div class="falling-letter" style="--left:10%; --duration:5.2s; --delay:1s;">X</div>
+    <div class="falling-letter" style="--left:20%; --duration:2.7s; --delay:2s;">O</div>
+    <div class="falling-letter" style="--left:30%; --duration:4.8s; --delay:0.2s;">X</div>
+    <div class="falling-letter" style="--left:40%; --duration:3.9s; --delay:1.5s;">O</div>
+    <div class="falling-letter" style="--left:50%; --duration:2.3s; --delay:2.1s;">X</div>
+    <div class="falling-letter" style="--left:60%; --duration:5.1s; --delay:0.5s;">O</div>
+    <div class="falling-letter" style="--left:70%; --duration:4.1s; --delay:0.9s;">X</div>
+    <div class="falling-letter" style="--left:80%; --duration:3.5s; --delay:1.6s;">O</div>
+    <div class="falling-letter" style="--left:90%; --duration:5.0s; --delay:0.4s;">X</div>
+    <div class="falling-letter" style="--left:95%; --duration:3.9s; --delay:1.0s;">O</div>
+
+
+    <div class="ttt-container">
+        <h1 class="ttt-title">Tic Tac Toe</h1>
+
+        <div id="gameBoard" class="board">
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+            <div class="cell" data-cell></div>
+        </div>
+
+        <p id="statusText" class="status-text">Your turn!</p>
+
+        <a href="index.html" class="back-home">← Back to Home</a>
+        <button id="restartButton" class="restart-btn">Restart Game</button>
+    </div>
+
+    <script>
+        const X_CLASS = 'x';
+        const O_CLASS = 'o';
+        const WINNING_COMBINATIONS = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        const cellElements = document.querySelectorAll('[data-cell]');
+        const restartButton = document.getElementById('restartButton');
+        const statusText = document.getElementById('statusText');
+
+        let board = Array(9).fill(null);
+        startGame();
+
+        restartButton.addEventListener('click', startGame);
+
+        function startGame() {
+            board = Array(9).fill(null);
+            cellElements.forEach(cell => {
+                cell.classList.remove(X_CLASS, O_CLASS);
+                cell.removeEventListener('click', handleClick);
+                cell.addEventListener('click', handleClick, { once: true });
+            });
+            statusText.textContent = "Your turn!";
+        }
+
+        function handleClick(e) {
+            const cell = e.target;
+            const index = [...cellElements].indexOf(cell);
+
+            if (board[index]) return;
+
+            placeMark(cell, X_CLASS);
+            board[index] = X_CLASS;
+
+            if (checkWin(board, X_CLASS)) {
+                statusText.textContent = "You win!";
+                disableBoard();
+                return;
+            }
+
+            if (isDraw(board)) {
+                statusText.textContent = "It's a draw!";
+                disableBoard();
+                return;
+            }
+
+            disableBoard();
+            statusText.textContent = "Computer's turn...";
+
+            setTimeout(() => {
+                const bestMove = minimax(board, O_CLASS).index;
+                board[bestMove] = O_CLASS;
+                placeMark(cellElements[bestMove], O_CLASS);
+
+                if (checkWin(board, O_CLASS)) {
+                    statusText.textContent = "Computer wins!";
+                    disableBoard();
+                } else if (isDraw(board)) {
+                    statusText.textContent = "It's a draw!";
+                    disableBoard();
+                } else {
+                    enableBoard();
+                    statusText.textContent = "Your turn!";
+                }
+            }, 500);
+        }
+
+        function placeMark(cell, currentClass) {
+            cell.classList.add(currentClass);
+        }
+
+        function checkWin(b, player) {
+            return WINNING_COMBINATIONS.some(combo => combo.every(i => b[i] === player));
+        }
+
+        function isDraw(b) {
+            return b.every(cell => cell);
+        }
+
+        function disableBoard() {
+            cellElements.forEach(cell => cell.removeEventListener('click', handleClick));
+        }
+
+        function enableBoard() {
+            cellElements.forEach((cell, index) => {
+                if (!board[index]) {
+                    cell.addEventListener('click', handleClick, { once: true });
+                }
+            });
+        }
+
+        //Minmax
+        function minimax(newBoard, player, depth = 0) {
+            const availSpots = newBoard.map((val, i) => val === null ? i : null).filter(i => i !== null);
+
+            if (checkWin(newBoard, X_CLASS)) return { score: -10 + depth };
+            if (checkWin(newBoard, O_CLASS)) return { score: 10 - depth };
+            if (availSpots.length === 0) return { score: 0 };
+
+            const moves = [];
+
+            for (let i = 0; i < availSpots.length; i++) {
+                const index = availSpots[i];
+                const move = {};
+                move.index = index;
+                newBoard[index] = player;
+
+                if (player === O_CLASS) {
+                    move.score = minimax(newBoard, X_CLASS, depth + 1).score;
+                } else {
+                    move.score = minimax(newBoard, O_CLASS, depth + 1).score;
+                }
+
+                newBoard[index] = null;
+                moves.push(move);
+            }
+
+            let bestMove;
+            if (player === O_CLASS) {
+                let bestScore = -Infinity;
+                for (let m of moves) {
+                    if (m.score > bestScore) {
+                        bestScore = m.score;
+                        bestMove = m;
+                    }
+                }
+            } else {
+                let bestScore = Infinity;
+                for (let m of moves) {
+                    if (m.score < bestScore) {
+                        bestScore = m.score;
+                        bestMove = m;
+                    }
+                }
+            }
+
+            return bestMove;
+        }
+    </script>
+
+</body>
+
+</html>

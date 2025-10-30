@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="sticky">
+        <h1>QuickPlay</h1>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#games">Games</a>
+            <a href="#info">Info</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="first">
+            <h1>Welcome to QuickPlay!</h1>
+            <p>Play games like Snake and Tic Tac Toe!</p>
+        </section>
+
+        <section id="games" class="second">
+            <h2>Choose a Game</h2>
+            <div class="games">
+                <a href="snake.html" class="game-card card-snake">Play Snake</a>
+                <a href="ttt.html" class="game-card card-ttt">Play Tic Tac Toe</a>
+            </div>
+        </section>
+
+        <section id="info" class="third">
+            <h2>Info</h2>
+            <p>Right now you can play Snake and Tic Tac Toe - more games will be added soon.</p>
+        </section>
+    </main>
+
+
+    <footer>
+        <p>Thanks for playing! More games coming soon.</p>
+    </footer>
+
+</body>
+<script>
+    window.addEventListener("scroll", () => {
+        const header = document.querySelector("header");
+        if (window.scrollY > 0) {
+            header.classList.add("partially-transparent");
+        } else {
+            header.classList.remove("partially-transparent");
+        }
+    });
+</script>
+
+</html>

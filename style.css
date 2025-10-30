@@ -1,0 +1,287 @@
+body {
+  margin: 0;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  background-color: #f7f7f7;
+}
+
+header {
+  background-color: rgba(34, 34, 34, 1);
+  transition: background-color 0.3s ease;
+  z-index: 1000;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+
+}
+
+.partially-transparent {
+  background-color: rgba(34, 34, 34, 0.7);
+  backdrop-filter: blur(6px);
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+header h1 {
+  font-size: 40px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 20px;
+}
+
+nav a:hover {
+  color: rgb(212, 213, 220)
+}
+
+main {
+  flex: 1;
+  text-align: center;
+  padding: 30px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+main h1 {
+  font-size: 88px;
+}
+
+.games {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.game-card {
+  display: inline-block;
+  background: #0475f6;
+  color: white;
+  padding: 25px 30px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 30px;
+  margin-bottom: 30px;
+  margin-top: 40px;
+}
+
+.game-card:hover {
+  background: #065fc5;
+  transform: scale(1.1);
+}
+
+.card-snake {
+  background: #4CAF50;
+}
+
+.card-snake:hover {
+  background: #347937;
+}
+
+.box {
+  height: 100px;
+}
+
+footer {
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  text-align: center;
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+}
+
+/*TTT*/
+.falling-letter {
+  position: absolute;
+  font-size: 20px;
+  color: white;
+  top: -30px;
+  left: var(--left, 0);
+  opacity: 0.8;
+  animation: fall var(--duration, 4s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.ttt-container {
+  text-align: center;
+  animation: fadeIn 0.8s ease;
+  z-index: 10;
+}
+
+.ttt-title {
+  font-size: 64px;
+  margin-bottom: 20px;
+  color: #00b4ff;
+  text-shadow: 0 0 15px #00b4ff88;
+  letter-spacing: 2px;
+}
+
+.board {
+  width: 360px;
+  height: 360px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 8px;
+  background: #12122b;
+  border-radius: 20px;
+  padding: 8px;
+  box-shadow: 0 0 40px #00b4ff55;
+  margin: 20px auto;
+}
+
+.cell {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  font-size: 64px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.cell:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(1.05);
+}
+
+.cell.x::before {
+  content: "X";
+  color: #ff4d4d;
+  text-shadow: 0 0 10px #ff4d4d;
+}
+
+.cell.o::before {
+  content: "O";
+  color: #3ecfff;
+  text-shadow: 0 0 10px #3ecfff;
+}
+
+.status-text {
+  font-size: 24px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  color: #d6d6ff;
+  text-shadow: 0 0 10px #00b4ff44;
+}
+
+.restart-btn {
+  background: #00b4ff;
+  color: #fff;
+  font-size: 20px;
+  padding: 10px 30px;
+  margin-left: 30px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 0 20px #00b4ff88;
+  transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+  background: #0096d6;
+  transform: scale(1.1);
+  box-shadow: 0 0 40px #00b4ffcc;
+}
+
+.back-home {
+  display: inline-block;
+  margin-top: 30px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.back-home:hover {
+  transform: scale(1.1);
+  text-shadow: 0 0 10px #00b4ff;
+}
+
+/**/
+.first,
+.second,
+.third {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 46px;
+  text-align: center;
+  margin: -30px;
+  margin-top: -130px;
+  padding: 40px;
+}
+
+.first {
+  background: linear-gradient(135deg, #4CAF50, #0475f6);
+}
+
+.second {
+  background: linear-gradient(135deg, #ffd000, #f44336);
+}
+
+.third {
+  background: linear-gradient(135deg, #f700f3, #7a44e7);
+}
+
+h2 {
+  font-size: 100px;
+  margin-bottom: 20px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/*snake..........*/
+.snake-container {
+  text-align: center;
+  animation: fadeIn 0.8s ease;
+}
+
+.snake-title {
+  font-size: 64px;
+  margin-bottom: 20px;
+  color: #00ff00;
+  text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00aa, 0 0 30px #00ff00bb;
+}
+
+#gameCanvas {
+  background: #001100;
+  border: 2px solid #00ff00;
+  border-radius: 8px;
+  box-shadow: 0 0 20px #00ff0077, 0 0 40px #00ff0055 inset;
+  display: block;
+  margin: 0 auto;
+}
